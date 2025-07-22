@@ -1,0 +1,557 @@
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Sub User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom right, #e0f7fa, #cce5ff);
+            color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding-top: 20px;
+            box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .brand-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar .brand-logo img {
+            width: 60px;
+            border-radius: 10px;
+        }
+
+        .sidebar .brand-logo h6 {
+            font-size: 15px;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .sidebar a {
+            color: #0d47a1;
+            padding: 10px 20px;
+            display: block;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: #bbdefb;
+            color: #0d47a1;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            background-color: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: linear-gradient(to right, #f1f5f9, #e8f0fe);
+            border-bottom: 1px solid #e5e7eb;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background-color: #fff;
+        }
+
+        .table th,
+        .table td {
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .table thead {
+            background-color: #f1f5f9;
+        }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 13px;
+        }
+
+        .btn-edit {
+            background-color: #cfeffd;
+            border: none;
+            color: #05668d;
+            font-weight: 500;
+        }
+
+        .btn-view {
+            background-color: #e6f4ff;
+            border: none;
+            color: #1d4ed8;
+            font-weight: 500;
+        }
+
+        .btn-danger {
+            background: linear-gradient(to right, #ff6b6b, #e63946);
+            border: none;
+            color: white;
+        }
+
+        .badge-success {
+            background-color: #10b981;
+        }
+
+        .badge-danger {
+            background-color: #ef4444;
+        }
+    </style>
+</head>
+
+<body>
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field in form %}
+            {% for error in field.errors %}
+            <li>{{ field.label }}: {{ error }}</li>
+            {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="brand-logo">
+            <img src="/static/adminlogo.jpg" alt="Logo" />
+            <h6>Pump Selection Tool</h6>
+        </div>
+
+        <!-- Panel Management -->
+        <div class="accordion accordion-flush" id="panelAccordion">
+            <div class="accordion-item bg-transparent border-0">
+                <h2 class="accordion-header" id="panelHeading">
+                    <button class="accordion-button collapsed bg-transparent text-dark px-3 py-2" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#panelCollapse" aria-expanded="false"
+                        aria-controls="panelCollapse" style="box-shadow: none;">
+                        <i class="bi bi-gear-fill me-2"></i> Panel Management
+                    </button>
+                </h2>
+                <div id="panelCollapse" class="accordion-collapse collapse" aria-labelledby="panelHeading"
+                    data-bs-parent="#panelAccordion">
+                    <div class="accordion-body p-0">
+                        <ul class="list-unstyled ps-4">
+                            <li><a href="/subusers"><i class="bi bi-person-lines-fill me-2"></i> Sub Users</a></li>
+                            <li><a href="/login_log"><i class="bi bi-journal-text me-2"></i> Login Log</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Masters Management -->
+        <div class="accordion accordion-flush" id="mastersAccordion">
+            <div class="accordion-item bg-transparent border-0">
+                <h2 class="accordion-header" id="mastersHeading">
+                    <button class="accordion-button collapsed bg-transparent text-dark px-3 py-2" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#mastersCollapse" aria-expanded="false"
+                        aria-controls="mastersCollapse" style="box-shadow: none;">
+                        <i class="bi bi-database-fill-gear me-2"></i> Masters Management
+                    </button>
+                </h2>
+                <div id="mastersCollapse" class="accordion-collapse collapse" aria-labelledby="mastersHeading"
+                    data-bs-parent="#mastersAccordion">
+                    <div class="accordion-body p-0">
+                         <ul class="list-unstyled ps-4">
+                            <li><a href="/submasters"><i class="bi bi-people-fill me-2"></i> Sub Masters</a></li>
+                            <li><a href="/categories"><i class="bi bi-tags-fill me-2"></i> Categories</a></li>
+                            <li><a href="/motor_rating"><i class="bi bi-speedometer2 me-2"></i> Motor Rating</a></li>
+                            <li><a href="/phase"><i class="bi bi-lightning-fill me-2"></i> Phase</a></li>
+                            <li><a href="/hertz"><i class="bi bi-lightning-charge-fill me-2"></i> Hertz - Hz</a></li>
+                            <li><a href="/rpm"><i class="bi bi-recycle me-2"></i> RPM</a></li>
+                            <li><a href="/pipesize"><i class="bi bi-wrench-adjustable-circle me-2"></i> Pipe Size</a>
+                            </li>
+                            <li><a href="/size"><i class="bi bi-arrows-angle-expand me-2"></i> Size</a></li>
+                            <li><a href="/discharge_unit"><i class="bi bi-arrow-repeat me-2"></i> Discharge Unit</a></li>
+                            <li><a href="/discharge"><i class="bi bi-droplet-half me-2"></i> Discharge</a></li>
+                            <li><a href="/motor_body"><i class="bi bi-cpu-fill me-2"></i> Motor Body
+                                    Material</a></li>
+                            <li><a href="/certifications"><i class="bi bi-patch-check-fill me-2"></i> Certifications</a></li>
+                            <li><a href="/motor_rotor_material"><i class="bi bi-cpu me-2"></i> Motor Rotor Material</a>
+                            </li>
+                            <li><a href="/impeller"><i class="bi bi-circle-half me-2"></i> Impeller/Bowl Material</a>
+                            </li>
+                            <li><a href="/motor_type"><i class="bi bi-gear-wide-connected me-2"></i> Motor Type</a></li>
+                            <li><a href="/star_rating"><i class="bi bi-star-fill me-2"></i> Star Rating</a></li>
+                            <li><a href="/products"><i class="bi bi-box2-fill me-2"></i> Products</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="/settings_silver"><i class="bi bi-sliders"></i> System Settings</a>
+        <a href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content d-flex flex-column">
+        <!-- Topbar -->
+        <div class="topbar">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                    <li class="breadcrumb-item">Panel Management</li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="/submasters">Submasters</a></li>
+                </ol>
+            </nav>
+            <div>
+                {% if request.session.user %}
+                <div class="alert alert-info rounded-0 m-0">
+                    <div class="container text-start">
+                        <strong>Welcome:</strong> {{ request.session.user }}<br>
+                        <strong>User Type:</strong> {{ request.session.user_type }}
+                    </div>
+                </div>
+                {% endif %}
+                <a href="/logout" class="btn btn-sm"
+                    style="background-color: #fcebea; color: #b91c1c; border: 1px solid #f8d7da;"><i
+                        class="bi bi-box-arrow-right"></i> Logout</a>
+            </div>
+        </div>
+        <div class="container form-container">
+            <h4><img src="/static/adminlogo.jpg"> Edit Sub Master</h4>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ updatereq.as_p }}
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address *</label>
+                    <div class="input-group">
+                        <input type="email" name="email" id="email" class="form-control" value="{{ submaster.email }}">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label>Username*</label>
+                    <input type="text" name="username" class="form-control" value="{{ submaster.user }}">
+                </div>
+
+
+                <!-- Login ID -->
+                <div class="mb-3">
+                    <label for="login_id" class="form-label">Login ID *</label>
+                    <div class="input-group">
+                        <input type="text" name="login_id" id="id" class="form-control"
+                            value="{{ submaster.login_id }}">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="new_password" class="form-label">New Password *</label>
+                    <input type="text" name="password" id="new_password" class="form-control"
+                        placeholder="Enter new password" value="{{ submaster.password }}">
+                </div>
+                <!-- Folder Name -->
+                <div class="form-section section-success">
+                    <label for="folder_name" class="form-label">Folder Name *</label>
+                    <input type="text" name="foldername" id="folder_name" class="form-control"
+                        value="{{ submaster.foldername }}">
+                    <small class="text-muted">Used to save <em>Products</em> images.</small>
+                </div>
+
+                <!-- Licence Domain -->
+                <div class="form-section section-success">
+                    <label for="license_domain" class="form-label">Licence Domain *</label>
+                    <input type="text" name="licence_domain" id="license_domain" class="form-control"
+                        value="{{ submaster.licence_domain }}">
+                    <small class="text-muted">Used for licence domain for <strong>SILVER PUMPS & MOTORS</strong>.
+                        Example:
+                        <i>example.com</i></small>
+                </div>
+
+                <!-- Embed Domains -->
+                <div class="form-section section-info">
+                    <label for="embed_domains" class="form-label">Embed Domains *</label>
+                    <textarea name="embed_domain" id="embed_domains" class="form-control"
+                        rows="2">{{ submaster.embed_domain }}</textarea>
+                    <small class="text-muted">Used for embed domain for <strong>SILVER PUMPS & MOTORS</strong>. Example:
+                        <i>example.com</i></small>
+                </div>
+
+                <div class="container">
+                    <!-- Licence Logo Upload -->
+                    <div class="section-box">
+                        <div class="section-title">Licence Logo</div>
+                        <input type="file" class="form-control" name="licence_logo" id="licence_logo">
+
+                        <div class="info-box mt-2">
+                            <strong>Tools Logo Size:</strong>
+                            Around <i>310px × 110px</i>. Height needs 110px, and width should be less than or equal to
+                            310px.
+                        </div>
+
+                        {% if submaster.licence_logo %}
+                        <div class="mt-2">Current Logo - Tools</div>
+                        <img src="{{ submaster.licence_logo.url }}" alt="logo" width="150"
+                            style="border: 1px solid #ccc; padding: 5px;">
+                        {% endif %}
+                    </div>
+
+
+                    <!-- Tools Logo Upload -->
+                    <div class="section-box">
+                        <div class="section-title">Tools Logo</div>
+                        <input type="file" class="form-control" name="tools_logo" id="tools_logo">
+
+                        <div class="info-box mt-2">
+                            <strong>Tools Logo Size:</strong>
+                            Around <i>310px × 110px</i>. Height needs 110px, and width should be less than or equal to
+                            310px.
+                        </div>
+
+                        {% if submaster.tools_logo %}
+                        <div class="mt-2">Current Logo - Tools</div>
+                        <img src="{{ submaster.tools_logo.url }}" alt="logo" width="150"
+                            style="border: 1px solid #ccc; padding: 5px;">
+                        {% endif %}
+                    </div>
+                    <!-- LOGIN SCREEN Logo Upload -->
+                    <div class="section-box">
+                        <div class="section-title">Login Screen Logo</div>
+                        <input type="file" class="form-control" name="login_screenlogo" id="login_screenlogo">
+
+                        <div class="info-box mt-2">
+                            <strong>Tools Logo Size:</strong>
+                            Around <i>310px × 110px</i>. Height needs 110px, and width should be less than or equal to
+                            310px.
+                        </div>
+
+                        {% if submaster.login_screenlogo %}
+                        <div class="mt-2">Current Logo - Tools</div>
+                        <img src="{{ submaster.login_screenlogo.url }}" alt="logo" width="150"
+                            style="border: 1px solid #ccc; padding: 5px;">
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">First Name *</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="firstname" value="{{ submaster.firstname }}"
+                            required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Last Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="lastname" value="{{ submaster.lastname }}">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Access Code</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="access_code" value="{{ submaster.access_code }}">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Address</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" name="address">{{ submaster.address }}</textarea>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Zipcode</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="zipcode" value="{{ submaster.zipcode }}">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Mobile</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="mobile" value="{{ submaster.mobile }}">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Fax</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="fax" value="{{ submaster.fax }}">
+                    </div>
+                </div>
+
+                <!-- Block User Toggle -->
+
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="blockUser" name="is_blocked" {% if submaster.is_blocked %}checked{% endif %}>
+                    <label class="form-check-label text-danger fw-semibold" for="blockUser">Block User</label>
+                </div>
+
+
+
+                <div class="row mb-3">
+                    <label for="dbHost" class="col-sm-3 col-form-label">Database Host *</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="dbHost" name="database_host"
+                            value="{{ submaster.database_host }}" readonly>
+                    </div>
+                </div>
+
+                <!-- Database Name -->
+                <div class="row mb-3">
+                    <label for="dbName" class="col-sm-3 col-form-label">Database Name *</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="dbName" name="db_name"
+                            value="{{ submaster.db_name }}" readonly>
+                    </div>
+                </div>
+
+                <!-- Database Username -->
+                <div class="row mb-3">
+                    <label for="dbUser" class="col-sm-3 col-form-label">Database User Name *</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="dbUser" name="db_username"
+                            value="{{ submaster.db_username }}" readonly>
+                    </div>
+                </div>
+
+                <!-- Database Password -->
+                <div class="row mb-3">
+                    <label for="dbPassword" class="col-sm-3 col-form-label">Database Password</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control" id="dbPassword" name="db_password"
+                            value="{{ submaster.db_password }}" readonly>
+                    </div>
+                </div>
+                </fieldset>
+        </div>
+        <div class="container mt-4">
+            <fieldset class="border p-3">
+                <legend class="float-none w-auto px-3">👁️ Sub User Access Areas</legend>
+                <p><strong>Total sections:</strong> {{ sections|length }}</p>
+                <pre>{{ sections }}</pre>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Section</th>
+                            <th>Allowed</th>
+                            <th>Unlimited</th>
+                            <th>Enabled</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sec_id, section in sections %}
+                        {% with perm=existing_permissions|get_item:section %}
+                        <tr>
+                            <td>{{ section }}</td>
+
+                            <td>
+                                <input type="number" name="allowed_{{ sec_id }}" class="form-control"
+                                    value="{{ perm.allowed|default:0 }}">
+                            </td>
+
+                            <td class="text-center">
+                                <input type="checkbox" name="unlimited_{{ sec_id }}" {% if perm and perm.unlimited %}checked{% endif %}>
+                            </td>
+
+                            <td class="text-center">
+                                <input type="checkbox" name="enabled_{{ sec_id }}" {% if perm and perm.enabled %}checked{% endif %}>
+                            </td>
+                        </tr>
+                        {% endwith %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="btn-group mt-4">
+            <button type="submit" class="btn btn-success">Update</button>
+            <a href="/subusers" class="btn btn-secondary">Cancel</a>
+        </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <script>
+        function previewImage(input, previewId) {
+            const file = input.files[0];
+            const preview = document.getElementById(previewId);
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => preview.src = e.target.result;
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById("licenceLogo").addEventListener("change", function () {
+            previewImage(this, "previewLicence");
+        });
+
+        document.getElementById("toolsLogo").addEventListener("change", function () {
+            previewImage(this, "previewTools");
+        });
+
+        document.getElementById("loginLogo").addEventListener("change", function () {
+            previewImage(this, "previewLogin");
+        });
+    </script>
+    <script>
+        document.getElementById("blockUser").addEventListener("change", function () {
+            if (this.checked) {
+                alert("User has been blocked.");
+            } else {
+                alert("User has been unblocked.");
+            }
+        });
+
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const unlimitedCheckbox = document.querySelector('.unlimited-checkbox');
+            const allowedNumberInput = document.querySelector('.allowed-number');
+
+            if (unlimitedCheckbox && allowedNumberInput) {
+                unlimitedCheckbox.addEventListener('change', function () {
+                    allowedNumberInput.disabled = this.checked;
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

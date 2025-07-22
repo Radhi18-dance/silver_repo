@@ -1,0 +1,226 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>System Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8f9fc;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 250px;
+            background: linear-gradient(to bottom right, #e0f7fa, #cce5ff);
+            padding: 20px 10px;
+            box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .brand-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-logo img {
+            width: 60px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 8px 15px;
+            color: #0d47a1;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: #bbdefb;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #eef6fd;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .topbar .user-info {
+            text-align: right;
+            background-color: #d1f0ff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="brand-logo">
+            <img src="{% static 'adminlogo.jpg' %}" alt="Logo">
+            <h6>Pump Selection Tool</h6>
+        </div>
+
+        <!-- Accordion Menu -->
+        <div class="accordion" id="sidebarAccordion">
+            <!-- Panel Management -->
+            <div class="accordion-item bg-transparent border-0">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed bg-transparent text-dark px-3 py-2" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#panelCollapse">
+                        <i class="bi bi-gear-fill me-2"></i> Panel Management
+                    </button>
+                </h2>
+                <div id="panelCollapse" class="accordion-collapse collapse" data-bs-parent="#sidebarAccordion">
+                    <div class="accordion-body p-0">
+                        <ul class="list-unstyled ps-4">
+                            <li><a href="/subusers"><i class="bi bi-person-lines-fill me-2"></i> Sub Users</a></li>
+                            <li><a href="/login_log"><i class="bi bi-journal-text me-2"></i> Login Log</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Masters Management -->
+            <div class="accordion-item bg-transparent border-0">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed bg-transparent text-dark px-3 py-2" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#mastersCollapse">
+                        <i class="bi bi-database-fill-gear me-2"></i> Masters Management
+                    </button>
+                </h2>
+                <div id="mastersCollapse" class="accordion-collapse collapse" data-bs-parent="#sidebarAccordion">
+                    <div class="accordion-body p-0">
+                        <ul class="list-unstyled ps-4">
+                            <li><a href="/submasters"><i class="bi bi-people-fill me-2"></i> Sub Masters</a></li>
+                            <li><a href="/categories"><i class="bi bi-tags-fill me-2"></i> Categories</a></li>
+                            <li><a href="/motor_rating"><i class="bi bi-speedometer2 me-2"></i> Motor Rating</a></li>
+                            <li><a href="/phase"><i class="bi bi-lightning-fill me-2"></i> Phase</a></li>
+                            <li><a href="/hertz"><i class="bi bi-lightning-charge-fill me-2"></i> Hertz - Hz</a></li>
+                            <li><a href="/rpm"><i class="bi bi-recycle me-2"></i> RPM</a></li>
+                            <li><a href="/pipesize"><i class="bi bi-wrench-adjustable-circle me-2"></i> Pipe Size</a>
+                            </li>
+                            <li><a href="/size"><i class="bi bi-arrows-angle-expand me-2"></i> Size</a></li>
+                            <li><a href="/discharge_unit"><i class="bi bi-arrow-repeat me-2"></i> Discharge Unit</a></li>
+                            <li><a href="/discharge"><i class="bi bi-droplet-half me-2"></i> Discharge</a></li>
+                            <li><a href="/motor_body"><i class="bi bi-cpu-fill me-2"></i> Motor Body
+                                    Material</a></li>
+                            <li><a href="/certifications"><i class="bi bi-patch-check-fill me-2"></i> Certifications</a></li>
+                            <li><a href="/motor_rotor_material"><i class="bi bi-cpu me-2"></i> Motor Rotor Material</a>
+                            </li>
+                            <li><a href="/impeller"><i class="bi bi-circle-half me-2"></i> Impeller/Bowl Material</a>
+                            </li>
+                            <li><a href="/motor_type"><i class="bi bi-gear-wide-connected me-2"></i> Motor Type</a></li>
+                            <li><a href="/star_rating"><i class="bi bi-star-fill me-2"></i> Star Rating</a></li>
+                            <li><a href="/products"><i class="bi bi-box2-fill me-2"></i> Products</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="/settings_silver" class="active"><i class="bi bi-sliders"></i> System Settings</a>
+        <a href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Topbar -->
+        <div class="topbar">
+            <nav aria-label="breadcrumb" class="mb-0">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                    <li class="breadcrumb-item">Panel Management</li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="/subusers">Subusers</a></li>
+                </ol>
+            </nav>
+
+            <div class="user-info">
+                <strong>Welcome:</strong> {{ request.session.user }}<br>
+                <strong>User Type:</strong> {{ request.session.user_type }}
+                <a href="/logout" class="btn btn-sm"
+                    style="background-color: #fcebea; color: #b91c1c; border: 1px solid #f8d7da;"><i
+                        class="bi bi-box-arrow-right"></i> Logout</a>
+            </div>
+        </div>
+
+        <!-- System Settings Form -->
+        <h5>System Settings</h5>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">No Star Message *</label>
+                    <input type="text" name="no_star_message" class="form-control" value="{{ no_star_message }}">
+                </div>
+            </div>
+            <div class="alert alert-info py-2">Note: Shows when no star rating selected for Motor/Pump.</div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Head Unit</label>
+                    <select name="head_unit" class="form-select border-success">
+                        <option value="Meters" {% if head_unit == 'Meters' %}selected{% endif %}>Meters</option>
+                        <option value="Feet" {% if head_unit == 'Feet' %}selected{% endif %}>Feet</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Discharge Unit</label>
+                    <select name="discharge_unit" class="form-select border-success">
+                        <option value="LPH - Liter Per Hour" {% if discharge_unit == 'LPH - Liter Per Hour' %}selected{% endif %}>LPH - Liter Per Hour</option>
+                        <option value="GPM" {% if discharge_unit == 'GPM' %}selected{% endif %}>GPM</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Rating Unit</label>
+                    <select name="rating_unit" class="form-select border-success">
+                        <option value="HP" {% if rating_unit == 'HP' %}selected{% endif %}>HP</option>
+                        <option value="kW" {% if rating_unit == 'kW' %}selected{% endif %}>kW</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Per Page (Customer Side)</label>
+                <input type="text" name="per_page" class="form-control" value="{{ per_page }}">
+            </div>
+
+            <div class="alert alert-info py-2">Help Text!</div>
+
+            <div class="mb-3">
+                <label class="form-label">Head</label>
+                <textarea name="help_head" class="form-control" rows="3">{{ help_head }}</textarea>
+            </div>
+
+            <button class="btn btn-success me-2">Save</button>
+            <a href="/subusers" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</body>
+
+</html>

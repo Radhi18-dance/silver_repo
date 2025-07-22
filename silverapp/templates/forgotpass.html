@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Password Reset</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            /* New background */
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
+            background-color: #1c1f2b;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            color: #ffffff;
+            width: 320px;
+            animation: fadeInScale 0.8s ease forwards;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        @keyframes fadeInScale {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f1f1f1;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-size: 14px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            background: #2c2f3a;
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .captcha {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .captcha img {
+            margin-left: 10px;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #5c82b3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3e6592;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .footer a {
+            color: #6ca0dc;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Reset Password</h2>
+        <form method="post">
+            {% csrf_token %}
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Enter username" />
+
+            <label for="verification">Verification Code</label>
+            <input type="text" name="captcha" id="verification" placeholder="Enter code" />
+
+            <div class="captcha">
+                <span style="background:#000; color:white; padding:5px 10px; border-radius:4px;">{{captcha}}</span>
+            </div>
+
+            <button>Send Password</button>
+
+            <div class="footer">
+                Having Details? <a href="/">Login now</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

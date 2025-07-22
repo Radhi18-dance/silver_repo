@@ -1,0 +1,392 @@
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit pipesize</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- ✅ Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom right, #e0f7fa, #cce5ff);
+            color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding-top: 20px;
+            box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .brand-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar .brand-logo img {
+            width: 60px;
+            border-radius: 10px;
+        }
+
+        .sidebar .brand-logo h6 {
+            font-size: 15px;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .sidebar a {
+            color: #0d47a1;
+            padding: 10px 20px;
+            display: block;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: #bbdefb;
+            color: #0d47a1;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 0;
+            background-color: #f8fafc;
+            min-height: 100vh;
+        }
+
+
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background-color: #fff;
+        }
+
+        .table th,
+        .table td {
+            font-size: 16px;
+            vertical-align: middle;
+        }
+
+        .table thead {
+            background-color: #f1f5f9;
+        }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 13px;
+        }
+
+        .btn-edit {
+            background-color: #cfeffd;
+            border: none;
+            color: #05668d;
+            font-weight: 500;
+        }
+
+        .btn-view {
+            background-color: #e6f4ff;
+            border: none;
+            color: #1d4ed8;
+            font-weight: 500;
+        }
+
+        .btn-danger {
+            background: linear-gradient(to right, #ff6b6b, #e63946);
+            border: none;
+            color: white;
+        }
+
+        .badge-success {
+            background-color: #10b981;
+        }
+
+        .badge-danger {
+            background-color: #ef4444;
+        }
+
+        /* Navbar fixed at top */
+        .navbar-top {
+            background-color: #eef4ff;
+            border-bottom: 1px solid #ddd;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+            /* this keeps it like your screenshot */
+        }
+
+        .breadcrumb-container {
+            margin: 0;
+            padding: 0;
+        }
+
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* Back button spacing */
+        .back-button {
+            margin: 20px 25px 0;
+        }
+
+        .form-section {
+            background-color: #ffffff;
+            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+
+        .form-header {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-label-required::after {
+            content: "*";
+            color: red;
+            margin-left: 4px;
+        }
+
+        .hint-text {
+            font-size: 13px;
+            color: #333;
+        }
+
+        .note-text {
+            font-size: 12px;
+            color: #0d6efd;
+        }
+
+        .bg-light-blue {
+            background-color: #e9f5ff;
+        }
+
+        .btn-success {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-light p-4">
+
+
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="brand-logo">
+            <img src="/static/adminlogo.jpg" alt="Logo" />
+            <h6>Pump Selection Tool</h6>
+        </div>
+
+        <!-- Panel Management -->
+        <div class="accordion accordion-flush" id="panelAccordion">
+            <div class="accordion-item bg-transparent border-0">
+                <h2 class="accordion-header" id="panelHeading">
+                    <button class="accordion-button collapsed bg-transparent text-dark px-3 py-2" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#panelCollapse" aria-expanded="false"
+                        aria-controls="panelCollapse" style="box-shadow: none;">
+                        <i class="bi bi-gear-fill me-2"></i> Panel Management
+                    </button>
+                </h2>
+                <div id="panelCollapse" class="accordion-collapse collapse" aria-labelledby="panelHeading"
+                    data-bs-parent="#panelAccordion">
+                    <div class="accordion-body p-0">
+                        <ul class="list-unstyled ps-4">
+                            <li><a href="/subusers"><i class="bi bi-person-lines-fill me-2"></i> Sub Users</a></li>
+                            <li><a href="/login_log"><i class="bi bi-journal-text me-2"></i> Login Log</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Masters Management -->
+        <div class="accordion accordion-flush" id="mastersAccordion">
+            <div class="accordion-item bg-transparent border-0">
+                <h2 class="accordion-header" id="mastersHeading">
+                    <button class="accordion-button collapsed bg-transparent text-dark px-3 py-2" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#mastersCollapse" aria-expanded="false"
+                        aria-controls="mastersCollapse" style="box-shadow: none;">
+                        <i class="bi bi-database-fill-gear me-2"></i> Masters Management
+                    </button>
+                </h2>
+                <div id="mastersCollapse" class="accordion-collapse collapse" aria-labelledby="mastersHeading"
+                    data-bs-parent="#mastersAccordion">
+                    <div class="accordion-body p-0">
+                        <ul class="list-unstyled ps-4">
+                            <li><a href="/submasters"><i class="bi bi-people-fill me-2"></i> Sub Masters</a></li>
+                            <li><a href="/categories"><i class="bi bi-tags-fill me-2"></i> Categories</a></li>
+                            <li><a href="/motor_rating"><i class="bi bi-speedometer2 me-2"></i> Motor Rating</a></li>
+                            <li><a href="/phase"><i class="bi bi-lightning-fill me-2"></i> Phase</a></li>
+                            <li><a href="/hertz"><i class="bi bi-lightning-charge-fill me-2"></i> Hertz - Hz</a></li>
+                            <li><a href="/rpm"><i class="bi bi-recycle me-2"></i> RPM</a></li>
+                            <li><a href="/pipesize"><i class="bi bi-wrench-adjustable-circle me-2"></i> Pipe Size</a>
+                            </li>
+                            <li><a href="/size"><i class="bi bi-arrows-angle-expand me-2"></i> Size</a></li>
+                            <li><a href="/discharge_unit"><i class="bi bi-arrow-repeat me-2"></i> Discharge Unit</a>
+                            </li>
+                            <li><a href="/discharge"><i class="bi bi-droplet-half me-2"></i> Discharge</a></li>
+                            <li><a href="/motor_body"><i class="bi bi-cpu-fill me-2"></i> Motor Body
+                                    Material</a></li>
+                            <li><a href="/certifications"><i class="bi bi-patch-check-fill me-2"></i> Certifications</a>
+                            </li>
+                            <li><a href="/motor_rotor_material"><i class="bi bi-cpu me-2"></i> Motor Rotor Material</a>
+                            </li>
+                            <li><a href="/impeller"><i class="bi bi-circle-half me-2"></i> Impeller/Bowl Material</a>
+                            </li>
+                            <li><a href="/motor_type"><i class="bi bi-gear-wide-connected me-2"></i> Motor Type</a></li>
+                            <li><a href="/star_rating"><i class="bi bi-star-fill me-2"></i> Star Rating</a></li>
+                            <li><a href="/products"><i class="bi bi-box2-fill me-2"></i> Products</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="/settings_silver"><i class="bi bi-sliders"></i> System Settings</a>
+        <a href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Topbar -->
+        <div class="navbar-top">
+            <nav aria-label="breadcrumb" class="breadcrumb-container">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                    <li class="breadcrumb-item">Panel Management</li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{% url 'rpm' %}">RPM</a>
+                    </li>
+                </ol>
+            </nav>
+            <div>
+                {% if request.session.user %}
+                <div class="alert alert-info rounded-0 m-0">
+                    <div class="container text-start">
+                        <strong>Welcome:</strong> {{ request.session.user }}<br>
+                        <strong>User Type:</strong> {{ request.session.user_type }}
+                    </div>
+                </div>
+                {% endif %}
+                <a href="/logout" class="btn btn-sm"
+                    style="background-color: #fcebea; color: #b91c1c; border: 1px solid #f8d7da;"><i
+                        class="bi bi-box-arrow-right"></i> Logout</a>
+            </div>
+        </div>
+        <div class="container">
+            <div class="form-section">
+                <h5 class="form-header"><i class="bi bi-pencil-square"></i> Edit Pipe Size</h5>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- Pipe Size -->
+                    <div class="mb-3">
+                        <label for="pipe_size" class="form-label form-label-required">Pipe Size</label>
+                        <input type="text" class="form-control" id="pipe_size" name="pipe_size"
+                            value="{{ pipe.pipe_size }}" required>
+                    </div>
+                    <div class="mb-3 bg-light-blue p-2">
+                        <span class="hint-text">
+                            i.e. 15x15, 25x25, 32 MM (1.25"), 50 MM (2"), 40 MM (1.5"), 65 MM (2.5") etc...
+                        </span>
+                    </div>
+
+                    <!-- Account -->
+                    <div class="mb-3">
+                        <label for="account" class="form-label form-label-required">Account</label>
+                        <input type="text" class="form-control" id="account" name="account" value="{{ pipe.account }}"
+                            required>
+                    </div>
+
+                    <!-- Categories -->
+                    <!-- Categories -->
+                    <div class="mb-3">
+                        <label class="form-label">Categories</label>
+                        <div class="dropdown w-100" id="categoryDropdown">
+                            <button class="form-select text-start" type="button" id="dropdownToggle"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                0 Category(s) Selected
+                            </button>
+                            <ul class="dropdown-menu p-2 bg-warning-subtle border shadow"
+                                style="width: 100%; max-height: 300px; overflow-y: auto;">
+                                <!-- Search Filter -->
+                                <li class="mb-2">
+                                    <input type="text" class="form-control form-control-sm" placeholder="Enter keywords"
+                                        id="categorySearch">
+                                </li>
+                                <!-- Buttons -->
+                                <li class="mb-2 d-flex justify-content-between px-2">
+                                    <button type="button" class="btn btn-sm btn-outline-success" id="checkAll">✓ Check
+                                        all</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" id="uncheckAll">✘
+                                        Uncheck all</button>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <!-- Category checkboxes -->
+                                <li>
+                                    <div id="categoryList">
+                                        {% for cat in categories %}
+                                        <div class="form-check category-item" data-name="{{ cat.name|lower }}">
+                                            <input class="form-check-input category-checkbox" type="checkbox"
+                                                name="categories" value="{{ cat.id }}" id="cat_{{ cat.id }}"
+                                                data-name="{{ cat.name }}" {% if cat.id in selected_categories %}checked{% endif %}>
+                                            <label class="form-check-label" for="cat_{{ cat.id }}">
+                                                {{ cat.name }}
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="status" id="status" value="1" {% if pipe.status %}checked{% endif %}>
+                            <label class="form-check-label" for="status">
+                                Active
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="d-flex">
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <a href="{% url 'pipesize' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Optionally include Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</body>
+
+</html>
